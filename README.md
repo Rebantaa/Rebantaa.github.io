@@ -47,12 +47,3 @@ cd Rebantaa.github.io
 
 Open `index.html` directly in a browser, or use a local live server extension.
 
-## Deployment
-
-The site is deployed through GitHub Pages from the `main` branch.
-
-## Notes
-
-- Resume PDF should be placed inside the `assets/` folder.
-- Main portrait image should be placed inside the `images/` folder.
-- All asset paths should remain relative for GitHub Pages compatibility.
