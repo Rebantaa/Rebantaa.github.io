@@ -31,7 +31,7 @@
        To change fonts later: swap families in this link AND update the
        --font-* variables in style.css :root.
   -->
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Roboto+Slab:wght@100..900&display=swap" rel="stylesheet" />
   <!-- Nippo (display font for the name + bold headings) — free for personal &
        commercial use via the Fontshare / Indian Type Foundry license.
        Confirm the current license at https://www.fontshare.com/fonts/nippo before deployment. -->
@@ -45,7 +45,12 @@
        TOP NAVIGATION  (cream bar: logo + tagline + mobile menu)
        ============================================================ -->
   <header class="topbar" id="top">
-    <a class="logo" href="#top" aria-label="Rebanta Daadhiich — home">&lt;/Rebanta Daadhiich&gt;</a>
+    <div class="nav-greeting" id="navGreeting" aria-label="Live local greeting">
+      <span class="nav-dot" aria-hidden="true"></span>
+      <span id="greetingText">Good Morning</span>
+      <span class="nav-sep">·</span>
+      <span id="greetingTime">00:00 AM</span>
+    </div>
 
     <!-- Tagline (sections live in the circular wheel, so no nav links here) -->
     <p class="tagline">Cybersecurity Enthusiast · Blue Teamer by Day, Red Teamer by Night</p>
@@ -77,12 +82,15 @@
         <div class="name-stack">
           <!-- PORTRAIT: replace images/portrait.png with your transparent photo.
                The SVG is a fallback so the page is never broken. -->
-          <img
-            class="portrait"
-            src="images/portrait.png"
-            onerror="this.onerror=null; this.src='images/portrait.svg';"
-            alt="Portrait of Rebanta Daadhiich"
-          />
+          <!-- Circular portrait: place IMG_2827.JPG inside the project's images/ folder.
+               Path used: ./images/IMG_2827.JPG (relative — works on GitHub Pages). -->
+          <div class="hero-portrait-circle">
+            <img
+              src="./images/IMG_2827.JPG"
+              onerror="this.onerror=null; this.src='images/portrait.png';"
+              alt="Portrait of Rebanta Daadhiich"
+            />
+          </div>
           <h1 class="name">
             <span>Rebanta</span>
             <span>Daadhiich</span>
@@ -179,30 +187,50 @@
     <section id="about" class="section">
       <div class="section-container">
         <p class="kicker"><span class="kicker-num">01</span> / ABOUT</p>
-        <h2>About Me</h2>
-        <p class="lead">I'm a Master's student in Cybersecurity &amp; Trusted Systems at Purdue University, building practical defenses, threat-detection systems, and cloud-secure tools. My focus is blue team engineering — turning noisy telemetry into clear, actionable signal — with a working knowledge of offensive security fundamentals so I can think like the people I'm defending against.</p>
-        <p>From multi-source log analysis and Splunk investigations to building Flask honeypots and detection pipelines, I like shipping security tooling that's pragmatic, well-documented, and genuinely useful to a team. CompTIA Security+ · CISEH · AWS CCP certified.</p>
+        <div class="about-layout">
+          <div class="about-main">
+            <h2>Signal Brief</h2>
+            <p class="lead">I'm a <span class="keyword-highlight">cybersecurity graduate</span> from <span class="keyword-highlight">Purdue University</span> with a focus on <span class="keyword-highlight">Cybersecurity &amp; Trusted Systems</span>, building <span class="keyword-highlight">practical defenses</span>, <span class="keyword-highlight">threat-detection systems</span>, and <span class="keyword-highlight">cloud-secure tools</span>. My focus is <span class="keyword-highlight">blue team engineering</span> — turning noisy <span class="keyword-highlight">telemetry</span> into clear, actionable signal — with a working knowledge of <span class="keyword-highlight">offensive security fundamentals</span> so I can think like the people I'm defending against.</p>
+            <p>From <span class="keyword-highlight">multi-source log analysis</span> and <span class="keyword-highlight">Splunk investigations</span> to building <span class="keyword-highlight">Flask honeypots</span> and <span class="keyword-highlight">detection pipelines</span>, I like shipping security tooling that's pragmatic, well-documented, and genuinely useful to a team. CompTIA Security+ · CISEH certified.</p>
+          </div>
+          <aside class="resume-cta">
+            <p class="resume-cta-head">Want the full packet?</p>
+            <p class="resume-cta-body">Download my resume for a cleaner snapshot of my experience, projects, and technical stack.</p>
+            <!-- Place your PDF at: ./assets/Rebanta-Resume.pdf
+                 Create an assets/ folder next to index.html and drop the file there.
+                 Then update the href below if the path differs. -->
+            <a href="./assets/Rebanta-Resume.pdf" target="_blank" rel="noopener noreferrer" class="resume-btn">View Resume ↗</a>
+          </aside>
+        </div>
 
         <!-- Focus areas — fills the section and signals specialties at a glance -->
         <div class="highlight-grid">
           <div class="highlight">
-            <span class="highlight-no">01</span>
-            <h3>Blue Team Engineering</h3>
+            <div class="highlight-head">
+              <span class="highlight-no">01</span>
+              <h3>Blue Team Engineering</h3>
+            </div>
             <p>Detection rules, alert tuning, and SOC-ready investigation workflows.</p>
           </div>
           <div class="highlight">
-            <span class="highlight-no">02</span>
-            <h3>Threat Detection</h3>
+            <div class="highlight-head">
+              <span class="highlight-no">02</span>
+              <h3>Threat Detection</h3>
+            </div>
             <p>Log correlation, anomaly hunting, and SIEM-driven incident analysis.</p>
           </div>
           <div class="highlight">
-            <span class="highlight-no">03</span>
-            <h3>Cloud Security</h3>
+            <div class="highlight-head">
+              <span class="highlight-no">03</span>
+              <h3>Cloud Security</h3>
+            </div>
             <p>Hardening AWS workloads, least-privilege IAM, and secure deployments.</p>
           </div>
           <div class="highlight">
-            <span class="highlight-no">04</span>
-            <h3>Secure Systems</h3>
+            <div class="highlight-head">
+              <span class="highlight-no">04</span>
+              <h3>Secure Systems</h3>
+            </div>
             <p>Trusted-systems design with privacy, integrity, and resilience in mind.</p>
           </div>
         </div>
@@ -212,7 +240,7 @@
     <section id="stack" class="section section-alt">
       <div class="section-container">
         <p class="kicker"><span class="kicker-num">02</span> / STACK</p>
-        <h2>Stack &amp; Tools</h2>
+        <h2>Arsenal</h2>
         <!-- EDIT STACK CATEGORIES HERE: each .stack-card = one category.
              Add/remove <span> pills to change the tools listed. -->
         <div class="stack-grid">
@@ -255,7 +283,7 @@
     <section id="experience" class="section section-dark">
       <div class="section-container">
         <p class="kicker"><span class="kicker-num">03</span> / EXPERIENCE</p>
-        <h2>Experience</h2>
+        <h2>Field Logs</h2>
 
         <div class="timeline2" id="expTimeline">
           <div class="tl-line"><span class="tl-progress" id="tlProgress"></span></div>
@@ -265,24 +293,6 @@
                date → role → company → location → bullets → tags. -->
           <article class="exp-item left">
             <span class="exp-marker"><span class="no">01</span></span>
-            <div class="exp-card">
-              <p class="exp-date">Mar 2025 — Present</p>
-              <h3 class="exp-role">Graduate Research Assistant</h3>
-              <p class="exp-company">Purdue University</p>
-              <p class="exp-location">West Lafayette, IN</p>
-              <ul class="exp-bullets">
-                <li>Research secure communication workflows, voice-message confidentiality, and practical security tooling for sensitive systems.</li>
-                <li>Build and test prototype security mechanisms focused on privacy, integrity, and usable secure communication.</li>
-                <li>Document findings and implementation tradeoffs for research review and future experimentation.</li>
-              </ul>
-              <div class="tags">
-                <span>Research</span><span>Secure Communication</span><span>Privacy</span><span>Systems Security</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="exp-item right">
-            <span class="exp-marker"><span class="no">02</span></span>
             <div class="exp-card">
               <p class="exp-date">2025 — Present</p>
               <h3 class="exp-role">University Residences Student Office Staff</h3>
@@ -299,8 +309,8 @@
             </div>
           </article>
 
-          <article class="exp-item left">
-            <span class="exp-marker"><span class="no">03</span></span>
+          <article class="exp-item right">
+            <span class="exp-marker"><span class="no">02</span></span>
             <div class="exp-card">
               <p class="exp-date">Jan 2024 — May 2024</p>
               <h3 class="exp-role">Information Technology Analyst</h3>
@@ -317,8 +327,8 @@
             </div>
           </article>
 
-          <article class="exp-item right">
-            <span class="exp-marker"><span class="no">04</span></span>
+          <article class="exp-item left">
+            <span class="exp-marker"><span class="no">03</span></span>
             <div class="exp-card">
               <p class="exp-date">Aug 2023 — Nov 2023</p>
               <h3 class="exp-role">Network Engineer Intern</h3>
@@ -345,7 +355,7 @@
     <section id="projects" class="section section-alt">
       <div class="section-container">
         <p class="kicker"><span class="kicker-num">04</span> / PROJECTS</p>
-        <h2>Projects</h2>
+        <h2>Builds &amp; Breaches</h2>
         <!-- EDIT PROJECTS HERE: each <article class="card"> is one project.
              - bullets:      <li> items inside .card-bullets
              - concepts:     <span> tags inside the first .card-group
@@ -454,12 +464,11 @@
     <section id="education" class="section section-dark">
       <div class="section-container">
         <p class="kicker"><span class="kicker-num">05</span> / EDUCATION</p>
-        <h2>Education</h2>
+        <h2>Training Ground</h2>
 
         <div class="edu-grid">
           <article class="edu-card">
             <span class="edu-star" aria-hidden="true">✦</span>
-            <span class="edu-pill">Master of Science</span>
             <h3 class="edu-school">PURDUE UNIVERSITY</h3>
             <p class="edu-degree">Master of Science in Cybersecurity &amp; Trusted Systems</p>
             <div class="edu-meta">
@@ -476,7 +485,6 @@
 
           <article class="edu-card">
             <span class="edu-star" aria-hidden="true">✦</span>
-            <span class="edu-pill">Bachelor of Engineering</span>
             <h3 class="edu-school">THADOMAL SHAHANI ENGINEERING COLLEGE</h3>
             <p class="edu-degree">Bachelor of Engineering in Computer Engineering</p>
             <div class="edu-meta">
@@ -485,9 +493,11 @@
             </div>
             <p class="edu-label">Relevant Coursework</p>
             <div class="tags">
-              <span>Database Management Systems</span><span>Artificial Intelligence &amp; Data Science</span>
-              <span>Big Data Analytics</span><span>Data Mining &amp; Business Intelligence</span>
-              <span>Computer Networks</span><span>Operating Systems</span>
+              <span>Data Structure</span><span>Database Management System</span>
+              <span>Operating System</span><span>Computer Network</span>
+              <span>Cryptography &amp; System Security</span><span>Cloud Computing</span>
+              <span>Machine Learning</span><span>Big Data Analysis</span>
+              <span>Applied Data Science</span><span>Distributed Computing</span>
             </div>
             <p class="edu-date">2020 — 2024</p>
           </article>
@@ -498,19 +508,22 @@
     <section id="contact" class="section section-alt">
       <div class="section-container">
         <p class="kicker"><span class="kicker-num">06</span> / CONTACT</p>
-        <h2>Let's Talk</h2>
+        <h2>Open Channel</h2>
 
         <!-- Contact panel keeps the section feeling full and intentional -->
         <div class="contact-panel">
           <div class="contact-intro">
-            <p class="contact-status"><span class="status-dot" aria-hidden="true"></span> Available for 2026 internships &amp; full-time roles</p>
-            <p class="lead">Open to opportunities in blue team / detection engineering, SOC analysis, and cloud security. Have a role, a project, or just want to talk shop? Reach out — I respond fast.</p>
+            <p class="contact-status"><span class="status-dot" aria-hidden="true"></span> Available for full-time roles</p>
+            <p class="lead">If you are building security teams, detection workflows, or cloud-secure products, I would be glad to connect. I am currently focused on full-time roles where I can contribute across blue team operations, threat detection, incident response, and secure engineering.</p>
           </div>
           <div class="contact-links">
-            <!-- Replace href values with your real links -->
-            <a class="contact-cta" href="mailto:rebantadaadhiich26@gmail.com" target="_blank" rel="noopener noreferrer">Contact Me →</a>
-            <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
-            <a href="https://linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="mailto:rebantadaadhiich26@gmail.com" target="_blank" rel="noopener noreferrer">Contact Me ↗</a>
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <!-- Place the resume PDF at: ./assets/Rebanta-Resume.pdf
+                 Create an assets/ folder next to index.html and drop the file there. -->
+            <a href="./assets/Rebanta-Resume.pdf" target="_blank" rel="noopener noreferrer">Resume ↗</a>
+            <a href="https://medium.com/@rebantadaadhiich26" target="_blank" rel="noopener noreferrer">Medium</a>
           </div>
         </div>
       </div>

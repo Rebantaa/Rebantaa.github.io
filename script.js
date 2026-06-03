@@ -178,41 +178,103 @@
      progress line grows to reach the furthest activated marker.
      ============================================================ */
   var expItems = Array.prototype.slice.call(document.querySelectorAll(".exp-item"));
+  var tlLine = document.querySelector(".tl-line");
   var tlProgress = document.getElementById("tlProgress");
+  var tlEnd = document.querySelector(".tl-end");
 
-  function updateProgress() {
-    if (!tlProgress) return;
-    var furthest = 0;
+  /* The base + progress lines span from the FIRST marker's center all the way
+     down to the center of the "TO BE CONTINUED" sticker, so the animation can
+     visually reach the very end of the timeline. Recomputed on load/resize. */
+  function layoutLine() {
+    if (!tlLine || !expItems.length || !tlEnd) return 0;
+    var firstMarker = expItems[0].querySelector(".exp-marker");
+    var startY = expItems[0].offsetTop + (firstMarker ? firstMarker.offsetTop + firstMarker.offsetHeight / 2 : 0);
+    var endY = tlEnd.offsetTop + tlEnd.offsetHeight / 2;
+    var height = Math.max(0, endY - startY);
+    tlLine.style.top = startY + "px";
+    tlLine.style.bottom = "auto";
+    tlLine.style.height = height + "px";
+    return height;
+  }
+
+  /* Continuous scroll progress: the orange line fills from the top of the base
+     line down to an activation line near the bottom of the viewport. Scrolling
+     down grows it toward "TO BE CONTINUED"; scrolling up retracts it smoothly
+     (CSS height transition does the easing). Markers light up as they pass. */
+  function syncTimeline() {
+    if (!tlProgress || !tlLine) return;
+    var activationLine = window.innerHeight * 0.82;
+
+    // marker glow state (reversible)
     expItems.forEach(function (item) {
-      if (!item.classList.contains("active")) return;
       var marker = item.querySelector(".exp-marker");
-      var center = item.offsetTop + (marker ? marker.offsetTop + marker.offsetHeight / 2 : 0);
-      if (center > furthest) furthest = center;
+      var rect = item.getBoundingClientRect();
+      var markerCenter = rect.top + (marker ? marker.offsetTop + marker.offsetHeight / 2 : 0);
+      if (markerCenter <= activationLine) {
+        item.classList.add("active");
+      } else {
+        item.classList.remove("active");
+      }
     });
-    tlProgress.style.height = furthest + "px";
+
+    // progress fill = portion of the base line that sits above the activation line
+    var lineRect = tlLine.getBoundingClientRect();
+    var filled = activationLine - lineRect.top;
+    if (filled < 0) filled = 0;
+    if (filled > lineRect.height) filled = lineRect.height;
+    tlProgress.style.height = filled + "px";
   }
 
-  if (expItems.length && "IntersectionObserver" in window) {
-    var expObserver = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            // activate once and keep it lit as you continue scrolling
-            entry.target.classList.add("active");
-            expObserver.unobserve(entry.target);
-          }
-        });
-        updateProgress();
-      },
-      { threshold: 0.35, rootMargin: "0px 0px -15% 0px" }
-    );
-    expItems.forEach(function (item) { expObserver.observe(item); });
-
-    // keep the progress line accurate if the layout reflows
-    window.addEventListener("resize", updateProgress);
-  } else {
-    // No IO support -> just show everything active
-    expItems.forEach(function (item) { item.classList.add("active"); });
-    updateProgress();
+  if (expItems.length) {
+    var ticking = false;
+    function onScrollOrResize() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () {
+        syncTimeline();
+        ticking = false;
+      });
+    }
+    function relayout() { layoutLine(); syncTimeline(); }
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", relayout);
+    window.addEventListener("load", relayout);
+    relayout(); // set geometry + initial state
   }
+
+  /* ============================================================
+     LIVE NAVBAR GREETING + CLOCK
+     Updates every minute. No external API — pure browser time.
+     Greeting thresholds:
+       05:00–11:59  Good Morning
+       12:00–16:59  Good Afternoon
+       17:00–20:59  Good Evening
+       21:00–04:59  Good Night
+     ============================================================ */
+  var greetingEl = document.getElementById("greetingText");
+  var timeEl     = document.getElementById("greetingTime");
+
+  function updateGreeting() {
+    var now  = new Date();
+    var h    = now.getHours();
+    var m    = now.getMinutes();
+    var ampm = h >= 12 ? "PM" : "AM";
+    var h12  = h % 12 || 12;
+    var mm   = m < 10 ? "0" + m : String(m);
+
+    var greeting;
+    if      (h >= 5  && h < 12) greeting = "Good Morning";
+    else if (h >= 12 && h < 17) greeting = "Good Afternoon";
+    else if (h >= 17 && h < 21) greeting = "Good Evening";
+    else                         greeting = "Good Night";
+
+    if (greetingEl) greetingEl.textContent = greeting;
+    if (timeEl)     timeEl.textContent     = h12 + ":" + mm + " " + ampm;
+  }
+
+  if (greetingEl && timeEl) {
+    updateGreeting();
+    setInterval(updateGreeting, 60000);
+  }
+
 })();

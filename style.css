@@ -107,21 +107,35 @@ input:focus-visible,
   min-height: 64px;
   border-bottom: 1px solid rgba(10, 26, 51, 0.15);
 }
-.logo {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: clamp(15px, 2vw, 20px);
-  letter-spacing: -0.01em;
+.nav-greeting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.3vw, 16px);
+  font-weight: 600;
   color: var(--ink);
   white-space: nowrap;
-  transition: opacity 0.2s var(--ease);
 }
-.logo:hover { opacity: 0.7; }
+.nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
+  animation: dotPulse 2.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes dotPulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3); }
+  50%       { box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.1); }
+}
+.nav-sep { opacity: 0.45; }
 
 .tagline {
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: 12.5px;
+  font-size: 14px;
   letter-spacing: -0.02em;
   color: var(--ink);
   margin-left: auto;
@@ -194,43 +208,57 @@ input:focus-visible,
 }
 
 /* ---- LEFT column ---- */
-.hero-left { position: relative; }
+.hero-left {
+  position: relative;
+  transform: translateY(-45px);
+}
 
 .name-stack {
   position: relative;
-  min-height: 320px;
-  display: flex;
-  align-items: flex-end;
+  padding-top: clamp(190px, 20vw, 300px);
+  width: fit-content;
 }
-.portrait {
+.hero-portrait-circle {
   position: absolute;
-  z-index: 1;
+  width: clamp(190px, 16vw, 270px);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 7px solid var(--cream);
+  box-shadow:
+    0 0 0 5px #061626,
+    0 18px 45px rgba(0, 0, 0, 0.4);
+  z-index: 3;
   left: 50%;
-  bottom: 0;
+  top: clamp(8px, 1.5vw, 24px);
   transform: translateX(-50%);
-  height: 460px;
-  width: auto;
-  opacity: 0.92;
   pointer-events: none;
-  filter: drop-shadow(0 20px 40px rgba(10, 42, 85, 0.4));
-  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
-          mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+}
+.hero-portrait-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+  display: block;
+  filter: none;
+  opacity: 1;
+  mix-blend-mode: normal;
 }
 .name {
   position: relative;
   z-index: 2;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(64px, 11vw, 144px);
-  line-height: 0.9;
-  letter-spacing: -0.025em;
+  font-family: "Roboto Slab", Georgia, serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+  font-size: clamp(3rem, 6vw, 7rem);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
   color: var(--cream-bright);
-  /* layered 3D drop shadow (offset bottom-right, no blur) */
   text-shadow:
-    2px 2px 0 var(--shadow),
-    4px 4px 0 var(--shadow),
-    6px 6px 0 var(--shadow),
-    7px 7px 0 var(--shadow);
+    5px 5px 0 #061626,
+    10px 10px 0 rgba(0, 0, 0, 0.45);
 }
 .name span { display: block; }
 
@@ -253,10 +281,14 @@ input:focus-visible,
   margin-top: 12px;
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(20px, 2.2vw, 27px);
+  font-size: clamp(17px, 1.95vw, 24px);
   line-height: 1.35;
   color: var(--cream-bright);
   max-width: 560px;
+  text-align: left;
+  /* counter the optical left side-bearing of the italic serif so the first
+     glyph lines up flush with the left edge of "CYBERSECURITY ENGINEER" */
+  text-indent: -2px;
 }
 
 /* ---- RIGHT column ---- */
@@ -537,7 +569,7 @@ input:focus-visible,
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(251, 243, 209, 0.15);
   border-radius: 16px;
-  padding: 30px 30px 32px;
+  padding: 26px 28px 28px;
   transition: transform 0.25s var(--ease), border-color 0.25s var(--ease);
 }
 .stack-card:hover { transform: translateY(-4px); border-color: var(--cream); }
@@ -546,7 +578,7 @@ input:focus-visible,
   font-size: 17px;
   font-weight: 700;
   letter-spacing: 0.01em;
-  margin-bottom: 18px;
+  margin-bottom: 15px;
   color: var(--cream);
 }
 /* Subtle navy/black depth on card headings only (not body text) */
@@ -587,10 +619,12 @@ input:focus-visible,
 }
 .edu-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
   background: var(--dark-card);
   border: 1px solid var(--dark-border);
   border-radius: 18px;
-  padding: 34px;
+  padding: 30px;
   box-shadow: 0 14px 36px rgba(8, 30, 63, 0.4);
   transition: transform 0.28s var(--ease), border-color 0.28s var(--ease), box-shadow 0.28s var(--ease);
 }
@@ -605,19 +639,6 @@ input:focus-visible,
   color: var(--orange);
   font-size: 20px;
   line-height: 1;
-}
-.edu-pill {
-  display: inline-block;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--cream-bright);
-  border: 1px solid var(--dark-border);
-  border-radius: 999px;
-  padding: 5px 12px;
-  margin-bottom: 18px;
 }
 .edu-school {
   font-family: var(--font-body);
@@ -651,11 +672,19 @@ input:focus-visible,
 }
 .edu-val { font-weight: 600; font-size: 16px; color: var(--cream-bright); }
 .edu-date {
-  margin-top: 22px;
+  /* pushed to the bottom so the date sits on the same baseline across both
+     equal-height cards on desktop */
+  margin-top: auto;
+  padding-top: 22px;
   font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: 700;
+  font-size: 13.5px;
   color: var(--orange);
+}
+/* slightly larger, better-padded coursework tags inside education cards */
+.edu-card .tags span {
+  font-size: 14px;
+  padding: 8px 14px;
 }
 
 /* shared small bordered tags (education coursework + experience tags) */
@@ -672,8 +701,10 @@ input:focus-visible,
 /* ---- EXPERIENCE timeline ---- */
 .timeline2 { position: relative; padding: 10px 0 0; }
 .tl-line {
+  /* top/height are set by script.js so the line spans the first marker down to
+     the "TO BE CONTINUED" sticker. These are sane fallbacks if JS is disabled. */
   position: absolute;
-  top: 0; bottom: 60px;
+  top: 0; bottom: 24px;
   left: 50%;
   width: 2px;
   transform: translateX(-50%);
@@ -814,18 +845,19 @@ input:focus-visible,
 .tbc {
   display: inline-block;
   background: var(--orange);
-  color: var(--shadow);
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  padding: 10px 18px;
-  border-radius: 8px;
+  color: #001f3f;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 15.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 14px 26px;
+  border-radius: 10px;
   transform: rotate(-2deg);
-  box-shadow: 0 8px 20px rgba(242, 163, 58, 0.4);
+  box-shadow: 0 10px 24px rgba(242, 163, 58, 0.5);
   transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
 }
-.tbc:hover { transform: rotate(-2deg) translateY(-3px) scale(1.04); box-shadow: 0 12px 26px rgba(242, 163, 58, 0.6); }
+.tbc:hover { transform: rotate(-2deg) translateY(-4px) scale(1.05); box-shadow: 0 16px 32px rgba(242, 163, 58, 0.65); }
 
 /* Project cards — vertical bullet-point cards in a balanced 2x2 grid */
 .cards { display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: 28px; }
@@ -848,8 +880,8 @@ input:focus-visible,
 .card-bullets li {
   position: relative;
   padding-left: 22px;
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.72;
   color: rgba(251, 243, 209, 0.88);
 }
 .card-bullets li::before {
@@ -870,7 +902,13 @@ input:focus-visible,
   margin-bottom: 9px;
 }
 /* tags inside project cards reuse the shared bordered .tags + solid .pills styles */
-.card .pills span { font-size: 12.5px; padding: 6px 12px; }
+.card .pills span { font-size: 13.5px; padding: 8px 15px; }
+.card .tags span { font-size: 13.5px; padding: 7px 13px; }
+/* Darker, more visible borders for project concept/tech tags and edu coursework tags */
+.card .tags span,
+.edu-card .tags span {
+  border-color: rgba(251, 243, 209, 0.5);
+}
 .card:hover {
   transform: translateY(-6px);
   border-color: var(--cream);
@@ -890,37 +928,111 @@ input:focus-visible,
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(251, 243, 209, 0.15);
   border-radius: 14px;
-  padding: 22px;
+  /* sized to its short content — number, heading, one-line description */
+  padding: clamp(16px, 1.6vw, 20px);
   transition: transform 0.25s var(--ease), border-color 0.25s var(--ease);
 }
 .highlight:hover { transform: translateY(-4px); border-color: var(--cream); }
-.highlight-no {
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 900;
-  color: var(--orange);
+/* number + heading: identical size, one clean line on desktop/laptop */
+.highlight-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 8px;
+  white-space: nowrap;
 }
-.highlight h3 { font-size: 17px; margin: 10px 0 6px; }
+.highlight-no,
+.highlight h3 {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 0.95vw, 1.05rem);  /* same size for both */
+  font-weight: 900;
+  line-height: 1.1;
+}
+.highlight-no {
+  color: var(--orange);
+  flex-shrink: 0;
+}
+.highlight h3 {
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin: 0;
+  color: var(--cream-bright);
+}
 .highlight p { font-size: 14.5px; line-height: 1.55; color: rgba(251, 243, 209, 0.8); max-width: none; }
+
+/* Keyword emphasis in the About section body text */
+.keyword-highlight {
+  color: #f8e9a1;
+  font-weight: 800;
+  text-shadow: 0 0 12px rgba(255, 178, 63, 0.25);
+}
+
+/* About — two-column layout (text left, resume CTA right) */
+.about-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 40px;
+  align-items: start;
+  margin-bottom: 8px;
+}
+.about-main { display: flex; flex-direction: column; }
+.resume-cta {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(251, 243, 209, 0.22);
+  border-radius: 16px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: sticky;
+  top: 84px;
+}
+.resume-cta-head {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--cream-bright);
+  max-width: none !important;
+  margin-bottom: 0;
+}
+.resume-cta-body {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  color: rgba(251, 243, 209, 0.82) !important;
+  max-width: none !important;
+  margin-bottom: 0;
+}
+.resume-btn {
+  display: inline-block;
+  background: var(--cream);
+  color: var(--navy);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15px;
+  padding: 13px 24px;
+  border-radius: 999px;
+  text-align: center;
+  margin-top: 4px;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.resume-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(8, 30, 63, 0.4);
+}
 
 /* Contact panel */
 .contact-panel {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 32px;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(251, 243, 209, 0.18);
-  border-radius: 20px;
-  padding: clamp(28px, 4vw, 48px);
-  box-shadow: 0 16px 40px rgba(8, 30, 63, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 .contact-status {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 800;
+  font-size: 15.5px;
   color: var(--cream-bright);
   margin-bottom: 14px !important;
 }
@@ -931,25 +1043,29 @@ input:focus-visible,
   box-shadow: 0 0 0 3px rgba(58, 208, 122, 0.25);
 }
 .contact-panel .lead { margin-bottom: 14px; }
-.contact-links { display: flex; flex-wrap: wrap; gap: 14px; }
+.contact-links {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 14px;
+  align-items: center;
+}
 .contact-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: var(--cream);
   color: var(--navy);
   font-weight: 700;
   font-size: 15px;
-  padding: 13px 28px;
+  height: 52px;
+  padding: 0 28px;
   border-radius: 999px;
+  min-width: 160px;
+  white-space: nowrap;
   transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 .contact-links a:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(8, 30, 63, 0.4); }
-/* Primary contact CTA — brighter cream + ring to stand out from GitHub/LinkedIn */
-.contact-links a.contact-cta {
-  background: var(--cream-bright);
-  box-shadow: 0 0 0 1px rgba(8, 30, 63, 0.12) inset;
-}
-.contact-links a.contact-cta:hover {
-  box-shadow: 0 12px 26px rgba(242, 163, 58, 0.45), 0 0 0 1px rgba(8, 30, 63, 0.12) inset;
-}
+/* All four buttons share one identical size — see flex-wrap: wrap on mobile */
 
 .footer {
   text-align: center;
@@ -968,7 +1084,9 @@ input:focus-visible,
   .edu-grid { grid-template-columns: 1fr; }
   .cards { grid-template-columns: repeat(2, 1fr); }
   .highlight-grid { grid-template-columns: repeat(2, 1fr); }
-  .contact-panel { grid-template-columns: 1fr; gap: 22px; }
+  .contact-panel { gap: 20px; }
+  .about-layout { grid-template-columns: 1fr; gap: 24px; }
+  .resume-cta { position: static; }
 
   /* Timeline -> single left rail, all cards on the right */
   .tl-line { left: 20px; }
@@ -988,10 +1106,10 @@ input:focus-visible,
     padding: 40px 32px 90px;
     gap: 8px;
   }
-  .hero-left { order: 1; }
+  .hero-left { order: 1; transform: translateY(-28px); }
   .hero-right { order: 2; margin-top: 24px; }
-  .name-stack { min-height: 260px; justify-content: center; }
-  .portrait { height: 360px; }
+  .name-stack { padding-top: clamp(160px, 22vw, 250px); margin: 0 auto; }
+  .hero-portrait-circle { width: clamp(155px, 20vw, 220px); top: clamp(6px, 1.2vw, 16px); }
   .name { text-align: center; }
   .role-label { text-align: center; }
   .intro { margin-inline: auto; text-align: center; }
@@ -1003,17 +1121,21 @@ input:focus-visible,
   .tagline { display: none; }
   .hamburger { display: flex; }
   .mobile-menu { top: 60px; }
+  /* Keep greeting compact on small screens — hide time, keep dot + label */
+  .nav-sep, #greetingTime { display: none; }
+  .nav-greeting { font-size: 13px; }
 
   .hero { padding: 28px 20px 80px; }
+  .hero-left { transform: translateY(-14px); }
   .intro { font-size: 19px; }
   .role-label { font-size: 15px; letter-spacing: 0.16em; }
-  .portrait { height: 300px; opacity: 0.85; }
-  .name-stack { min-height: 220px; }
+  .name-stack { padding-top: 150px; margin: 0 auto; }
+  .hero-portrait-circle { width: 135px; top: 8px; }
   .name {
+    font-size: clamp(2rem, 8.5vw, 3rem);
     text-shadow:
-      2px 2px 0 var(--shadow),
-      3px 3px 0 var(--shadow),
-      4px 4px 0 var(--shadow);
+      3px 3px 0 #061626,
+      6px 6px 0 rgba(0, 0, 0, 0.45);
   }
 
   /* Swap wheel for a clean button grid on phones */
@@ -1048,7 +1170,9 @@ input:focus-visible,
   .cards { grid-template-columns: 1fr; }
   .card { padding: 26px; }
   .highlight-grid { grid-template-columns: 1fr; gap: 14px; margin-top: 30px; }
-  .contact-panel { padding: 26px; }
+  /* allow the number+heading row to wrap on very small phones if needed */
+  .highlight-head { white-space: normal; }
+  .contact-links { flex-wrap: wrap; }
 
   /* Dark sections on phones */
   .edu-card { padding: 26px; }
