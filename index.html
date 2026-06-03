@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ============================================================
+       META / SEO  (edit title, description, and OG image here)
+       ============================================================ -->
+  <title>Rebanta Daadhiich — Cybersecurity Engineer</title>
+  <meta name="description" content="Rebanta Daadhiich — cybersecurity engineer focused on blue team engineering, threat detection, and secure systems. Blue Teamer by day, Red Teamer by night." />
+  <meta name="author" content="Rebanta Daadhiich" />
+
+  <!-- Open Graph (replace og-image.png with your own 1200x630 image) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Rebanta Daadhiich — Cybersecurity Engineer" />
+  <meta property="og:description" content="Blue Teamer by day, Red Teamer by night. Threat detection, secure systems, and the tools that keep attackers up at night." />
+  <meta property="og:image" content="images/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- ============================================================
+       FONTS  (Google Fonts — distinctive editorial pairing)
+       ============================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!--
+       Google Fonts (all open-source, no license payment):
+       - Fraunces        -> large display name + major headings (editorial serif)
+       - JetBrains Mono   -> navbar, wheel labels, technical labels, body (code feel)
+       - Instrument Serif -> italic intro line under the name
+       To change fonts later: swap families in this link AND update the
+       --font-* variables in style.css :root.
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <!-- Nippo (display font for the name + bold headings) — free for personal &
+       commercial use via the Fontshare / Indian Type Foundry license.
+       Confirm the current license at https://www.fontshare.com/fonts/nippo before deployment. -->
+  <link href="https://api.fontshare.com/v2/css?f[]=nippo@400,500,700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- ============================================================
+       TOP NAVIGATION  (cream bar: logo + tagline + mobile menu)
+       ============================================================ -->
+  <header class="topbar" id="top">
+    <a class="logo" href="#top" aria-label="Rebanta Daadhiich — home">&lt;/Rebanta Daadhiich&gt;</a>
+
+    <!-- Tagline (sections live in the circular wheel, so no nav links here) -->
+    <p class="tagline">Cybersecurity Enthusiast · Blue Teamer by Day, Red Teamer by Night</p>
+
+    <!-- Mobile hamburger -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <!-- Mobile slide-down menu -->
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
+    <a href="#about">About Me</a>
+    <a href="#stack">Stack / Tools</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#education">Education</a>
+    <a href="#contact">Contact</a>
+    <p class="mobile-tagline">Blue Teamer by Day, Red Teamer by Night</p>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <main>
+    <section class="hero" aria-label="Introduction">
+      <!-- LEFT: portrait layered behind the name, then role + intro line -->
+      <div class="hero-left">
+        <div class="name-stack">
+          <!-- PORTRAIT: replace images/portrait.png with your transparent photo.
+               The SVG is a fallback so the page is never broken. -->
+          <img
+            class="portrait"
+            src="images/portrait.png"
+            onerror="this.onerror=null; this.src='images/portrait.svg';"
+            alt="Portrait of Rebanta Daadhiich"
+          />
+          <h1 class="name">
+            <span>Rebanta</span>
+            <span>Daadhiich</span>
+          </h1>
+        </div>
+
+        <!-- Role label + the professional intro line (moved here from above the name) -->
+        <p class="role-label">Cybersecurity Engineer</p>
+        <p class="intro">I read logs like literature, hunt threats like puzzles,<br />and build the tools that keep attackers up at night.</p>
+      </div>
+
+      <!-- RIGHT: search + circular nav wheel -->
+      <div class="hero-right">
+        <!-- SEARCH BAR + FACTS API -->
+        <div class="search-wrap">
+          <form class="search-bar" id="searchForm" role="search" autocomplete="off">
+            <button type="submit" class="icon-btn" aria-label="Search for a fact">
+              <svg class="icon-search" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search for some interesting facts…"
+              aria-label="Search for interesting facts"
+            />
+            <button type="button" class="icon-clear" id="clearBtn" aria-label="Clear search" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </form>
+
+          <!-- Result card injected here by script.js -->
+          <div class="fact-region" id="factRegion" aria-live="polite"></div>
+        </div>
+
+        <!-- CIRCULAR NAV WHEEL (SVG, 6 wedges) -->
+        <div class="wheel-wrap">
+          <svg class="wheel" viewBox="0 0 400 400" role="navigation" aria-label="Section navigation wheel">
+            <!-- ABOUT ME -->
+            <a class="seg" href="#about" aria-label="01 About Me">
+              <path class="wedge" fill="#ECEFD9" d="M200 200 L200 10 A190 190 0 0 1 364.5 105 Z"/>
+              <text x="262" y="96"><tspan class="seg-no" x="262" dy="-4">01</tspan><tspan class="seg-label" x="262" dy="18">ABOUT ME</tspan></text>
+            </a>
+            <!-- STACK -->
+            <a class="seg" href="#stack" aria-label="02 Stack and Tools">
+              <path class="wedge" fill="#F4ECC9" d="M200 200 L364.5 105 A190 190 0 0 1 364.5 295 Z"/>
+              <text x="316" y="200"><tspan class="seg-no" x="316" dy="-4">02</tspan><tspan class="seg-label" x="316" dy="18">STACK</tspan></text>
+            </a>
+            <!-- EXPERIENCE -->
+            <a class="seg" href="#experience" aria-label="03 Experience">
+              <path class="wedge" fill="#F5E690" d="M200 200 L364.5 295 A190 190 0 0 1 200 390 Z"/>
+              <text x="260" y="300"><tspan class="seg-no" x="260" dy="-4">03</tspan><tspan class="seg-label" x="260" dy="18">EXPERIENCE</tspan></text>
+            </a>
+            <!-- PROJECTS -->
+            <a class="seg" href="#projects" aria-label="04 Projects">
+              <path class="wedge" fill="#F2D86A" d="M200 200 L200 390 A190 190 0 0 1 35.5 295 Z"/>
+              <text x="140" y="300"><tspan class="seg-no" x="140" dy="-4">04</tspan><tspan class="seg-label" x="140" dy="18">PROJECTS</tspan></text>
+            </a>
+            <!-- EDUCATION -->
+            <a class="seg" href="#education" aria-label="05 Education">
+              <path class="wedge" fill="#E7C24B" d="M200 200 L35.5 295 A190 190 0 0 1 35.5 105 Z"/>
+              <text x="84" y="200"><tspan class="seg-no" x="84" dy="-4">05</tspan><tspan class="seg-label" x="84" dy="18">EDUCATION</tspan></text>
+            </a>
+            <!-- CONTACT -->
+            <a class="seg" href="#contact" aria-label="06 Contact">
+              <path class="wedge" fill="#D4A82A" d="M200 200 L35.5 105 A190 190 0 0 1 200 10 Z"/>
+              <text x="140" y="96"><tspan class="seg-no" x="140" dy="-4">06</tspan><tspan class="seg-label" x="140" dy="18">CONTACT</tspan></text>
+            </a>
+            <!-- center hub -->
+            <circle cx="200" cy="200" r="44" fill="#003366" stroke="#FBF3D1" stroke-width="3"/>
+          </svg>
+
+          <!-- Mobile fallback: grid of section buttons (same numbers as the wheel) -->
+          <nav class="wheel-grid" aria-label="Sections">
+            <a href="#about"><span class="g-no">01</span> About Me</a>
+            <a href="#stack"><span class="g-no">02</span> Stack</a>
+            <a href="#experience"><span class="g-no">03</span> Experience</a>
+            <a href="#projects"><span class="g-no">04</span> Projects</a>
+            <a href="#education"><span class="g-no">05</span> Education</a>
+            <a href="#contact"><span class="g-no">06</span> Contact</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Scroll-down arrow -->
+      <a class="scroll-arrow" href="#about" aria-label="Scroll to content">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </a>
+    </section>
+
+    <!-- ============================================================
+         CONTENT SECTIONS  (edit the placeholder text below)
+         ============================================================ -->
+    <!-- Every section shares .section-container for identical left alignment -->
+    <section id="about" class="section">
+      <div class="section-container">
+        <p class="kicker"><span class="kicker-num">01</span> / ABOUT</p>
+        <h2>About Me</h2>
+        <p class="lead">I'm a Master's student in Cybersecurity &amp; Trusted Systems at Purdue University, building practical defenses, threat-detection systems, and cloud-secure tools. My focus is blue team engineering — turning noisy telemetry into clear, actionable signal — with a working knowledge of offensive security fundamentals so I can think like the people I'm defending against.</p>
+        <p>From multi-source log analysis and Splunk investigations to building Flask honeypots and detection pipelines, I like shipping security tooling that's pragmatic, well-documented, and genuinely useful to a team. CompTIA Security+ · CISEH · AWS CCP certified.</p>
+
+        <!-- Focus areas — fills the section and signals specialties at a glance -->
+        <div class="highlight-grid">
+          <div class="highlight">
+            <span class="highlight-no">01</span>
+            <h3>Blue Team Engineering</h3>
+            <p>Detection rules, alert tuning, and SOC-ready investigation workflows.</p>
+          </div>
+          <div class="highlight">
+            <span class="highlight-no">02</span>
+            <h3>Threat Detection</h3>
+            <p>Log correlation, anomaly hunting, and SIEM-driven incident analysis.</p>
+          </div>
+          <div class="highlight">
+            <span class="highlight-no">03</span>
+            <h3>Cloud Security</h3>
+            <p>Hardening AWS workloads, least-privilege IAM, and secure deployments.</p>
+          </div>
+          <div class="highlight">
+            <span class="highlight-no">04</span>
+            <h3>Secure Systems</h3>
+            <p>Trusted-systems design with privacy, integrity, and resilience in mind.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="stack" class="section section-alt">
+      <div class="section-container">
+        <p class="kicker"><span class="kicker-num">02</span> / STACK</p>
+        <h2>Stack &amp; Tools</h2>
+        <!-- EDIT STACK CATEGORIES HERE: each .stack-card = one category.
+             Add/remove <span> pills to change the tools listed. -->
+        <div class="stack-grid">
+          <article class="stack-card">
+            <h3>Security Tools &amp; Monitoring</h3>
+            <div class="pills">
+              <span>Splunk</span><span>SOAR</span><span>EDR</span><span>Wireshark</span>
+              <span>tcpdump</span><span>Nessus</span><span>Burp Suite</span><span>IDS/IPS</span>
+            </div>
+          </article>
+          <article class="stack-card">
+            <h3>Networking &amp; Protocols</h3>
+            <div class="pills">
+              <span>TCP/IP</span><span>HTTP/HTTPS</span><span>DNS</span><span>TLS</span>
+              <span>VPN</span><span>curl</span><span>dig</span><span>nslookup</span><span>Active Directory</span>
+            </div>
+          </article>
+          <article class="stack-card">
+            <h3>Scripting &amp; Cloud</h3>
+            <div class="pills">
+              <span>Python</span><span>Bash</span><span>JavaScript</span><span>REST APIs</span>
+              <span>AWS</span><span>GCP</span><span>Microsoft 365</span><span>Docker</span>
+            </div>
+          </article>
+          <article class="stack-card">
+            <h3>Operating Systems &amp; Compliance</h3>
+            <div class="pills">
+              <span>Windows</span><span>Linux</span><span>Kali</span><span>Ubuntu</span><span>macOS</span>
+              <span>MITRE ATT&amp;CK</span><span>OWASP Top 10</span><span>CIS</span><span>HIPAA</span><span>PCI-DSS</span><span>GRC</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         EXPERIENCE — scroll-activated timeline (blue theme).
+         Latest → oldest. Each <article class="exp-item"> is one job.
+         ============================================================ -->
+    <section id="experience" class="section section-dark">
+      <div class="section-container">
+        <p class="kicker"><span class="kicker-num">03</span> / EXPERIENCE</p>
+        <h2>Experience</h2>
+
+        <div class="timeline2" id="expTimeline">
+          <div class="tl-line"><span class="tl-progress" id="tlProgress"></span></div>
+
+          <!-- Latest → oldest. Each <article class="exp-item"> is one role.
+               Swap "left"/"right" to flip the desktop side. Card order:
+               date → role → company → location → bullets → tags. -->
+          <article class="exp-item left">
+            <span class="exp-marker"><span class="no">01</span></span>
+            <div class="exp-card">
+              <p class="exp-date">Mar 2025 — Present</p>
+              <h3 class="exp-role">Graduate Research Assistant</h3>
+              <p class="exp-company">Purdue University</p>
+              <p class="exp-location">West Lafayette, IN</p>
+              <ul class="exp-bullets">
+                <li>Research secure communication workflows, voice-message confidentiality, and practical security tooling for sensitive systems.</li>
+                <li>Build and test prototype security mechanisms focused on privacy, integrity, and usable secure communication.</li>
+                <li>Document findings and implementation tradeoffs for research review and future experimentation.</li>
+              </ul>
+              <div class="tags">
+                <span>Research</span><span>Secure Communication</span><span>Privacy</span><span>Systems Security</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="exp-item right">
+            <span class="exp-marker"><span class="no">02</span></span>
+            <div class="exp-card">
+              <p class="exp-date">2025 — Present</p>
+              <h3 class="exp-role">University Residences Student Office Staff</h3>
+              <p class="exp-company">Purdue University</p>
+              <p class="exp-location">West Lafayette, IN</p>
+              <ul class="exp-bullets">
+                <li>Support front-desk operations, resident questions, and administrative workflows in a customer-facing university environment.</li>
+                <li>Maintain accurate documentation, clear communication, and professional issue handling during daily operations.</li>
+                <li>Coordinate with residents and staff to resolve routine service requests efficiently.</li>
+              </ul>
+              <div class="tags">
+                <span>Communication</span><span>Documentation</span><span>Operations</span><span>Support</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="exp-item left">
+            <span class="exp-marker"><span class="no">03</span></span>
+            <div class="exp-card">
+              <p class="exp-date">Jan 2024 — May 2024</p>
+              <h3 class="exp-role">Information Technology Analyst</h3>
+              <p class="exp-company">Thoughtcom India</p>
+              <p class="exp-location">Mumbai, India</p>
+              <ul class="exp-bullets">
+                <li>Performed multi-source log analysis using Python and API pipelines to correlate anomalies across telemetry sources.</li>
+                <li>Translated technical findings into clear investigation notes, metrics reports, and reviewer-ready documentation.</li>
+                <li>Proposed reporting workflow improvements that strengthened detection visibility and reduced false-positive review effort.</li>
+              </ul>
+              <div class="tags">
+                <span>Python</span><span>APIs</span><span>Log Analysis</span><span>Detection Visibility</span><span>Reporting</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="exp-item right">
+            <span class="exp-marker"><span class="no">04</span></span>
+            <div class="exp-card">
+              <p class="exp-date">Aug 2023 — Nov 2023</p>
+              <h3 class="exp-role">Network Engineer Intern</h3>
+              <p class="exp-company">Jerai Fitness Pvt Ltd</p>
+              <p class="exp-location">Mumbai, India</p>
+              <ul class="exp-bullets">
+                <li>Supported incident response for LAN and VPN security events by analyzing logs and Wireshark packet captures.</li>
+                <li>Applied TCP/IP, HTTP/HTTPS, DNS, and TLS knowledge to distinguish misconfigurations from suspicious behavior.</li>
+                <li>Documented incident timelines and root-cause findings to support repeatable response runbooks.</li>
+              </ul>
+              <div class="tags">
+                <span>Wireshark</span><span>TCP/IP</span><span>DNS</span><span>TLS</span><span>Incident Response</span>
+              </div>
+            </div>
+          </article>
+
+          <div class="tl-end">
+            <a href="#contact" class="tbc">▸ TO BE CONTINUED</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section section-alt">
+      <div class="section-container">
+        <p class="kicker"><span class="kicker-num">04</span> / PROJECTS</p>
+        <h2>Projects</h2>
+        <!-- EDIT PROJECTS HERE: each <article class="card"> is one project.
+             - bullets:      <li> items inside .card-bullets
+             - concepts:     <span> tags inside the first .card-group
+             - technologies: <span> tags inside the second .card-group
+             - link:         change href="#" on .card-link to your GitHub/live URL -->
+        <div class="cards">
+          <article class="card">
+            <h3>NetSentry: Web Scraper Honeypot</h3>
+            <ul class="card-bullets">
+              <li>Designed a Flask-based honeypot to capture malicious automation and scraper behavior in real time.</li>
+              <li>Logged request metadata across trap endpoints to support detection engineering and bot behavior analysis.</li>
+              <li>Implemented CAPTCHA, rate limiting, IP blocking, and SMTP alerts for high-confidence bot activity.</li>
+              <li>Documented tuning decisions to reduce false positives and improve detection reliability.</li>
+            </ul>
+            <div class="card-group">
+              <p class="card-group-label">Concepts</p>
+              <div class="tags">
+                <span>Honeypots</span><span>Bot Detection</span><span>Web Security</span><span>Detection Engineering</span><span>Alerting</span>
+              </div>
+            </div>
+            <div class="card-group">
+              <p class="card-group-label">Technologies</p>
+              <div class="pills">
+                <span>Python</span><span>Flask</span><span>MySQL</span><span>JavaScript</span><span>Wireshark</span><span>SMTP</span><span>HTML/CSS</span>
+              </div>
+            </div>
+            <a href="#" class="card-link">View project →</a>
+          </article>
+
+          <article class="card">
+            <h3>Splunk Incident Investigation</h3>
+            <ul class="card-bullets">
+              <li>Built SPL searches to correlate activity across multiple log sources.</li>
+              <li>Investigated a multi-stage insider threat across 76,000 ingested events.</li>
+              <li>Traced attacker behavior from credential misuse to unauthorized data transfer.</li>
+              <li>Created investigation notes, timeline views, and dashboard elements to support faster triage.</li>
+            </ul>
+            <div class="card-group">
+              <p class="card-group-label">Concepts</p>
+              <div class="tags">
+                <span>SOC Investigation</span><span>Log Correlation</span><span>Insider Threat</span><span>SIEM</span><span>Incident Response</span>
+              </div>
+            </div>
+            <div class="card-group">
+              <p class="card-group-label">Technologies</p>
+              <div class="pills">
+                <span>Splunk</span><span>SPL</span><span>Dashboards</span><span>Log Analysis</span><span>MITRE ATT&amp;CK</span>
+              </div>
+            </div>
+            <a href="#" class="card-link">View project →</a>
+          </article>
+
+          <article class="card">
+            <h3>Data Breach Compliance Tracker</h3>
+            <ul class="card-bullets">
+              <li>Built a full-stack breach deadline tracker for GDPR, HIPAA, PCI-DSS, and CCPA workflows.</li>
+              <li>Implemented evidence upload and cloud-backed storage for compliance documentation.</li>
+              <li>Deployed the Flask application using AWS services while applying least-privilege access controls.</li>
+              <li>Used database-backed tracking for deadlines, audit logs, and breach status updates.</li>
+            </ul>
+            <div class="card-group">
+              <p class="card-group-label">Concepts</p>
+              <div class="tags">
+                <span>Cloud Security</span><span>Compliance Automation</span><span>GRC</span><span>Audit Logging</span><span>Secure Deployment</span>
+              </div>
+            </div>
+            <div class="card-group">
+              <p class="card-group-label">Technologies</p>
+              <div class="pills">
+                <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Flask</span><span>MySQL</span><span>AWS EC2</span><span>RDS</span><span>S3</span><span>IAM</span>
+              </div>
+            </div>
+            <a href="#" class="card-link">View project →</a>
+          </article>
+
+          <article class="card">
+            <h3>SecuGraph Network Threat Visualizer</h3>
+            <ul class="card-bullets">
+              <li>Built an interactive network threat visualization tool for analyzing suspicious traffic patterns.</li>
+              <li>Parsed PCAP/network data and represented hosts and flows as graph-based relationships.</li>
+              <li>Surfaced lateral movement indicators and unusual connections for faster triage.</li>
+              <li>Designed the interface to help analysts visually inspect network behavior.</li>
+            </ul>
+            <div class="card-group">
+              <p class="card-group-label">Concepts</p>
+              <div class="tags">
+                <span>Network Security</span><span>Threat Visualization</span><span>PCAP Analysis</span><span>Lateral Movement</span><span>Traffic Analysis</span>
+              </div>
+            </div>
+            <div class="card-group">
+              <p class="card-group-label">Technologies</p>
+              <div class="pills">
+                <span>Python</span><span>FastAPI</span><span>React</span><span>Cytoscape.js</span><span>Scapy</span><span>SQLite</span><span>JavaScript</span>
+              </div>
+            </div>
+            <a href="#" class="card-link">View project →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         EDUCATION — dark cinematic two-card layout.
+         EDIT ENTRIES: each <article class="edu-card"> is one school.
+         ============================================================ -->
+    <section id="education" class="section section-dark">
+      <div class="section-container">
+        <p class="kicker"><span class="kicker-num">05</span> / EDUCATION</p>
+        <h2>Education</h2>
+
+        <div class="edu-grid">
+          <article class="edu-card">
+            <span class="edu-star" aria-hidden="true">✦</span>
+            <span class="edu-pill">Master of Science</span>
+            <h3 class="edu-school">PURDUE UNIVERSITY</h3>
+            <p class="edu-degree">Master of Science in Cybersecurity &amp; Trusted Systems</p>
+            <div class="edu-meta">
+              <div><span class="edu-label">GPA</span><span class="edu-val">3.9 / 4.0</span></div>
+              <div><span class="edu-label">Location</span><span class="edu-val">West Lafayette, IN</span></div>
+            </div>
+            <p class="edu-label">Relevant Coursework</p>
+            <div class="tags">
+              <span>Cloud Security</span><span>Network Security</span><span>Malware Forensics</span>
+              <span>Security Analytics</span><span>Digital Forensics</span><span>Trusted Systems</span>
+            </div>
+            <p class="edu-date">2024 — 2026</p>
+          </article>
+
+          <article class="edu-card">
+            <span class="edu-star" aria-hidden="true">✦</span>
+            <span class="edu-pill">Bachelor of Engineering</span>
+            <h3 class="edu-school">THADOMAL SHAHANI ENGINEERING COLLEGE</h3>
+            <p class="edu-degree">Bachelor of Engineering in Computer Engineering</p>
+            <div class="edu-meta">
+              <div><span class="edu-label">GPA</span><span class="edu-val">3.4 / 4.0</span></div>
+              <div><span class="edu-label">Location</span><span class="edu-val">Mumbai, India</span></div>
+            </div>
+            <p class="edu-label">Relevant Coursework</p>
+            <div class="tags">
+              <span>Database Management Systems</span><span>Artificial Intelligence &amp; Data Science</span>
+              <span>Big Data Analytics</span><span>Data Mining &amp; Business Intelligence</span>
+              <span>Computer Networks</span><span>Operating Systems</span>
+            </div>
+            <p class="edu-date">2020 — 2024</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section section-alt">
+      <div class="section-container">
+        <p class="kicker"><span class="kicker-num">06</span> / CONTACT</p>
+        <h2>Let's Talk</h2>
+
+        <!-- Contact panel keeps the section feeling full and intentional -->
+        <div class="contact-panel">
+          <div class="contact-intro">
+            <p class="contact-status"><span class="status-dot" aria-hidden="true"></span> Available for 2026 internships &amp; full-time roles</p>
+            <p class="lead">Open to opportunities in blue team / detection engineering, SOC analysis, and cloud security. Have a role, a project, or just want to talk shop? Reach out — I respond fast.</p>
+          </div>
+          <div class="contact-links">
+            <!-- Replace href values with your real links -->
+            <a class="contact-cta" href="mailto:rebantadaadhiich26@gmail.com" target="_blank" rel="noopener noreferrer">Contact Me →</a>
+            <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>&copy; <span id="year"></span> Rebanta Daadhiich · Built with HTML, CSS &amp; vanilla JS.</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
