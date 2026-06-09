@@ -1,8 +1,10 @@
 /* ============================================================
    Rebanta Daadhiich — Portfolio interactions
-   - Facts search (Wikipedia summary first, Useless Facts fallback)
+   - Facts search (always random from Useless Facts API — intentionally playful)
    - Mobile hamburger menu
-   - Active wheel/segment highlighting via scroll spy
+   - Floating back-to-top button
+   - Experience timeline scroll animation
+   - Live navbar greeting + clock
    - Footer year
    All client-side. No API keys. CORS-friendly endpoints only.
    ============================================================ */
@@ -16,7 +18,7 @@
   /* ============================================================
      MOBILE MENU
      ============================================================ */
-  var hamburger = document.getElementById("hamburger");
+  var hamburger  = document.getElementById("hamburger");
   var mobileMenu = document.getElementById("mobileMenu");
 
   if (hamburger && mobileMenu) {
@@ -25,7 +27,6 @@
       hamburger.setAttribute("aria-expanded", String(open));
       hamburger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
     });
-    // Close menu when a link is tapped
     mobileMenu.querySelectorAll("a").forEach(function (a) {
       a.addEventListener("click", function () {
         mobileMenu.classList.remove("open");
@@ -36,17 +37,23 @@
 
   /* ============================================================
      FACTS SEARCH
+     The search bar is intentionally playful: whatever the user types,
+     the system always returns a random useless fact. The query is kept
+     visible on the card to make the randomness feel deliberate.
      ============================================================ */
-  var form = document.getElementById("searchForm");
-  var input = document.getElementById("searchInput");
+  var form     = document.getElementById("searchForm");
+  var input    = document.getElementById("searchInput");
   var clearBtn = document.getElementById("clearBtn");
-  var region = document.getElementById("factRegion");
+  var region   = document.getElementById("factRegion");
 
-  var TIMEOUT_MS = 5000;
-  var MAX_TRIES = 3;
-  var FACTS_URL = "https://uselessfacts.jsph.pl/api/v2/facts/random?language=en";
+  var TIMEOUT_MS     = 6000;
+  var MAX_SAFE_TRIES = 3;
+  var FACTS_URL      = "https://uselessfacts.jsph.pl/api/v2/facts/random?language=en";
 
-  /* fetch with a hard timeout via AbortController */
+  /* Stored for display only — never used to filter or route API calls */
+  var displayQuery = "";
+
+  /* ---------- Fetch with timeout ---------- */
   function fetchWithTimeout(url, opts) {
     opts = opts || {};
     var controller = new AbortController();
@@ -55,29 +62,19 @@
       .finally(function () { clearTimeout(id); });
   }
 
-  /* ---------- Client-side safety filter ----------
-     The Useless Facts API can return anything, so we reject facts containing
-     obvious unsafe keywords before showing them. Edit UNSAFE_WORDS to tune. */
+  /* ---------- Safety filter ---------- */
   var UNSAFE_WORDS = [
-    // profanity / sexual
     "sex", "sexual", "porn", "nude", "naked", "penis", "vagina", "genital",
     "orgasm", "masturbat", "erotic", "fuck", "shit", "bitch", "bastard",
     "prostitut", "brothel", "incest", "rape", "fetish",
-    // hate / slurs / discrimination
     "racist", "racism", "nazi", "hitler", "slur", "bigot", "supremac",
-    // violence / graphic / disturbing
     "murder", "kill", "death", "corpse", "gore", "behead", "torture",
     "massacre", "shooting", "stab", "execut", "mutilat", "cannibal",
-    // self-harm
     "suicide", "self-harm", "self harm", "overdose",
-    // drugs
     "cocaine", "heroin", "marijuana", "cannabis", "narcotic", "drug",
-    // politics / religion (controversy)
     "trump", "biden", "election", "democrat", "republican", "abortion",
     "islam", "muslim", "christian", "jewish", "hindu", "religion", "terroris"
   ];
-  // Match each term at the START of a word (leading \b) so inflections like
-  // "killed"/"killing" are caught while mid-word matches ("skill", "diet") aren't.
   var UNSAFE_RE = new RegExp("\\b(" + UNSAFE_WORDS.join("|") + ")", "i");
 
   function isSafeFact(text) {
@@ -85,7 +82,7 @@
     return !UNSAFE_RE.test(text);
   }
 
-  /* Fetch ONE random fact */
+  /* ---------- Useless Facts API ---------- */
   function getRandomFact() {
     return fetchWithTimeout(FACTS_URL, { headers: { Accept: "application/json" } })
       .then(function (res) {
@@ -98,9 +95,9 @@
       });
   }
 
-  /* Keep fetching until we get a SAFE fact (up to MAX_TRIES attempts) */
+  /* Retries up to MAX_SAFE_TRIES times to get a clean fact */
   function getSafeFact(triesLeft) {
-    if (triesLeft === undefined) triesLeft = MAX_TRIES;
+    if (triesLeft === undefined) triesLeft = MAX_SAFE_TRIES;
     return getRandomFact().then(function (text) {
       if (isSafeFact(text)) return text;
       if (triesLeft > 1) return getSafeFact(triesLeft - 1);
@@ -111,19 +108,28 @@
   /* ---------- Render helpers ---------- */
   function renderLoading() {
     region.innerHTML =
-      '<div class="fact-card"><p class="fact-loading">Finding a fun fact…</p></div>';
+      '<div class="fact-card"><p class="fact-loading">Fetching useless intelligence…</p></div>';
   }
 
+  /* Builds the intel-report card.
+     displayQuery is shown as "Query received: X" but has no effect on the API call. */
   function renderFact(text) {
     region.innerHTML = "";
+    var queryLabel = displayQuery
+      ? "Query received: " + displayQuery
+      : "Query received: nothing useful";
+
     var card = document.createElement("div");
     card.className = "fact-card";
     card.innerHTML =
+      '<p class="fact-query"></p>' +
+      '<p class="fact-preamble">No actionable intel found. Here\'s a useless fact anyway:</p>' +
       '<p class="fact-text"></p>' +
-      '<p class="fact-source">Source · Useless Facts API</p>' +
-      '<button type="button" class="fact-again">Tap for another</button>';
-    card.querySelector(".fact-text").textContent = text;
-    card.querySelector(".fact-again").addEventListener("click", runFactSearch);
+      '<button type="button" class="fact-again">Generate another useless fact →</button>';
+    card.querySelector(".fact-query").textContent  = queryLabel;
+    card.querySelector(".fact-text").textContent   = text;
+    /* "Generate another" keeps the same query label, just fetches a new random fact */
+    card.querySelector(".fact-again").addEventListener("click", fetchAndRender);
     region.appendChild(card);
   }
 
@@ -134,94 +140,81 @@
       '<button type="button" class="fact-again">Try again</button>' +
       "</div>";
     region.querySelector(".fact-text").textContent = message;
-    region.querySelector(".fact-again").addEventListener("click", runFactSearch);
+    region.querySelector(".fact-again").addEventListener("click", fetchAndRender);
   }
 
-  /* ---------- Main flow: always fetch a (safe) random fact ---------- */
-  function runFactSearch() {
+  /* ---------- Core fetch-and-render ----------
+     Always fetches a random fact. Query text is stored for display only. */
+  function fetchAndRender() {
     renderLoading();
     getSafeFact()
-      .then(renderFact)
+      .then(function (text) { renderFact(text); })
       .catch(function () {
-        renderMessage("I could not find a clean fact right now. Try again in a moment.", true);
+        renderMessage(
+          "The useless intelligence feed is offline. Try again in a moment.",
+          true
+        );
       });
   }
 
+  /* On form submit: capture what the user typed for the card label, then fetch random */
+  function runFactSearch() {
+    displayQuery = input ? input.value.trim() : "";
+    fetchAndRender();
+  }
+
   if (form && input && clearBtn && region) {
-    // Show/hide the clear button as the user types (typed text is not used to
-    // control the result — Enter / the search icon fetch a random fact).
     input.addEventListener("input", function () {
       clearBtn.hidden = input.value.length === 0;
     });
 
-    // Enter key OR clicking the search-icon submit button -> fetch a fact
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       runFactSearch();
     });
 
-    // Clear input + results
     clearBtn.addEventListener("click", function () {
-      input.value = "";
-      clearBtn.hidden = true;
+      input.value      = "";
+      displayQuery     = "";
+      clearBtn.hidden  = true;
       region.innerHTML = "";
       input.focus();
     });
   }
 
-  /* NOTE: Wheel highlighting is handled purely by CSS :hover / :focus-visible.
-     No segment is "active" by default — see .seg:hover in style.css. */
-
   /* ============================================================
-     EXPERIENCE TIMELINE — scroll activation (IntersectionObserver)
-     Each .exp-item gets .active when it scrolls into view; the orange
-     progress line grows to reach the furthest activated marker.
+     EXPERIENCE TIMELINE — scroll activation
      ============================================================ */
-  var expItems = Array.prototype.slice.call(document.querySelectorAll(".exp-item"));
-  var tlLine = document.querySelector(".tl-line");
+  var expItems   = Array.prototype.slice.call(document.querySelectorAll(".exp-item"));
+  var tlLine     = document.querySelector(".tl-line");
   var tlProgress = document.getElementById("tlProgress");
-  var tlEnd = document.querySelector(".tl-end");
+  var tlEnd      = document.querySelector(".tl-end");
 
-  /* The base + progress lines span from the FIRST marker's center all the way
-     down to the center of the "TO BE CONTINUED" sticker, so the animation can
-     visually reach the very end of the timeline. Recomputed on load/resize. */
   function layoutLine() {
     if (!tlLine || !expItems.length || !tlEnd) return 0;
     var firstMarker = expItems[0].querySelector(".exp-marker");
-    var startY = expItems[0].offsetTop + (firstMarker ? firstMarker.offsetTop + firstMarker.offsetHeight / 2 : 0);
-    var endY = tlEnd.offsetTop + tlEnd.offsetHeight / 2;
+    var startY = expItems[0].offsetTop +
+      (firstMarker ? firstMarker.offsetTop + firstMarker.offsetHeight / 2 : 0);
+    var endY   = tlEnd.offsetTop + tlEnd.offsetHeight / 2;
     var height = Math.max(0, endY - startY);
-    tlLine.style.top = startY + "px";
+    tlLine.style.top    = startY + "px";
     tlLine.style.bottom = "auto";
     tlLine.style.height = height + "px";
     return height;
   }
 
-  /* Continuous scroll progress: the orange line fills from the top of the base
-     line down to an activation line near the bottom of the viewport. Scrolling
-     down grows it toward "TO BE CONTINUED"; scrolling up retracts it smoothly
-     (CSS height transition does the easing). Markers light up as they pass. */
   function syncTimeline() {
     if (!tlProgress || !tlLine) return;
     var activationLine = window.innerHeight * 0.82;
-
-    // marker glow state (reversible)
     expItems.forEach(function (item) {
-      var marker = item.querySelector(".exp-marker");
-      var rect = item.getBoundingClientRect();
-      var markerCenter = rect.top + (marker ? marker.offsetTop + marker.offsetHeight / 2 : 0);
-      if (markerCenter <= activationLine) {
-        item.classList.add("active");
-      } else {
-        item.classList.remove("active");
-      }
+      var marker       = item.querySelector(".exp-marker");
+      var rect         = item.getBoundingClientRect();
+      var markerCenter = rect.top +
+        (marker ? marker.offsetTop + marker.offsetHeight / 2 : 0);
+      item.classList[markerCenter <= activationLine ? "add" : "remove"]("active");
     });
-
-    // progress fill = portion of the base line that sits above the activation line
     var lineRect = tlLine.getBoundingClientRect();
-    var filled = activationLine - lineRect.top;
-    if (filled < 0) filled = 0;
-    if (filled > lineRect.height) filled = lineRect.height;
+    var filled   = Math.min(Math.max(activationLine - lineRect.top, 0), lineRect.height);
     tlProgress.style.height = filled + "px";
   }
 
@@ -230,26 +223,39 @@
     function onScrollOrResize() {
       if (ticking) return;
       ticking = true;
-      window.requestAnimationFrame(function () {
-        syncTimeline();
-        ticking = false;
-      });
+      window.requestAnimationFrame(function () { syncTimeline(); ticking = false; });
     }
     function relayout() { layoutLine(); syncTimeline(); }
     window.addEventListener("scroll", onScrollOrResize, { passive: true });
     window.addEventListener("resize", relayout);
-    window.addEventListener("load", relayout);
-    relayout(); // set geometry + initial state
+    window.addEventListener("load",   relayout);
+    relayout();
+  }
+
+  /* ============================================================
+     FLOATING BACK TO TOP
+     Uses window.scrollTo instead of anchor navigation because the
+     navbar carries id="top" and is position:sticky — browsers may
+     treat a sticky element already in the viewport as "already reached"
+     and not scroll to document position 0. window.scrollTo always goes
+     to the absolute top regardless of sticky/fixed elements.
+     ============================================================ */
+  var backToTop = document.querySelector(".floating-back-to-top");
+
+  if (backToTop) {
+    backToTop.addEventListener("click", function (e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    window.addEventListener("scroll", function () {
+      backToTop.classList[window.scrollY > 400 ? "add" : "remove"]("is-visible");
+    }, { passive: true });
   }
 
   /* ============================================================
      LIVE NAVBAR GREETING + CLOCK
      Updates every minute. No external API — pure browser time.
-     Greeting thresholds:
-       05:00–11:59  Good Morning
-       12:00–16:59  Good Afternoon
-       17:00–20:59  Good Evening
-       21:00–04:59  Good Night
      ============================================================ */
   var greetingEl = document.getElementById("greetingText");
   var timeEl     = document.getElementById("greetingTime");
@@ -261,13 +267,10 @@
     var ampm = h >= 12 ? "PM" : "AM";
     var h12  = h % 12 || 12;
     var mm   = m < 10 ? "0" + m : String(m);
-
-    var greeting;
-    if      (h >= 5  && h < 12) greeting = "Good Morning";
-    else if (h >= 12 && h < 17) greeting = "Good Afternoon";
-    else if (h >= 17 && h < 21) greeting = "Good Evening";
-    else                         greeting = "Good Night";
-
+    var greeting =
+      h >= 5  && h < 12 ? "Good Morning"   :
+      h >= 12 && h < 17 ? "Good Afternoon" :
+      h >= 17 && h < 21 ? "Good Evening"   : "Good Night";
     if (greetingEl) greetingEl.textContent = greeting;
     if (timeEl)     timeEl.textContent     = h12 + ":" + mm + " " + ampm;
   }

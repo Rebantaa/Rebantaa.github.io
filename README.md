@@ -37,13 +37,3 @@ Rebantaa.github.io/
 │   └── earth-asia-solid.png
 └── README.md
 ```
-
-## Local Setup
-
-```bash
-git clone https://github.com/Rebantaa/Rebantaa.github.io.git
-cd Rebantaa.github.io
-```
-
-Open `index.html` directly in a browser, or use a local live server extension.
-

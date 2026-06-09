@@ -271,7 +271,7 @@ input:focus-visible,
   font-size: clamp(17px, 1.7vw, 21px);
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  color: var(--cream-bright);
+  color: #f6edc2;
   opacity: 0.95;
 }
 /* Professional intro line, moved to sit beneath the name */
@@ -279,16 +279,15 @@ input:focus-visible,
   position: relative;
   z-index: 2;
   margin-top: 12px;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(17px, 1.95vw, 24px);
-  line-height: 1.35;
+  font-family: "Iosevka Charon", monospace;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 23px;
+  line-height: 1.5;
+  letter-spacing: 0;
   color: var(--cream-bright);
   max-width: 560px;
   text-align: left;
-  /* counter the optical left side-bearing of the italic serif so the first
-     glyph lines up flush with the left edge of "CYBERSECURITY ENGINEER" */
-  text-indent: -2px;
 }
 
 /* ---- RIGHT column ---- */
@@ -1184,4 +1183,58 @@ input:focus-visible,
   .exp-marker { width: 38px; height: 38px; }
   .exp-item.left .exp-marker,
   .exp-item.right .exp-marker { left: -3px; }
+}
+
+/* ============================================================
+   FLOATING BACK TO TOP BUTTON
+   ============================================================ */
+.floating-back-to-top {
+  position: fixed;
+  right: clamp(18px, 3vw, 36px);
+  bottom: clamp(18px, 3vw, 36px);
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  color: var(--navy);
+  text-decoration: none;
+  font-family: "Public Sans", system-ui, sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(18px);
+  transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  z-index: 999;
+}
+.floating-back-to-top.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.floating-back-to-top:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* Fact card — playful intel-report layout */
+.fact-card .fact-query {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #8a8a8a;
+  margin-bottom: 8px;
+}
+.fact-card .fact-preamble {
+  font-family: "Instrument Serif", serif;
+  font-style: italic;
+  font-size: 13.5px;
+  color: #777;
+  line-height: 1.45;
+  margin-bottom: 10px;
 }
