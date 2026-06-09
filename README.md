@@ -4,7 +4,7 @@ This is my personal cybersecurity portfolio website built to showcase my backgro
 
 ## Live Site
 
-https://Rebantaa.github.io
+https://rebantaa.github.io/Personal-Portfolio/
 
 ## Tech Stack
 
@@ -26,7 +26,7 @@ https://Rebantaa.github.io
 ## Project Structure
 
 ```
-Rebantaa.github.io/
+Personal-Portfolio/
 ├── index.html
 ├── style.css
 ├── script.js
