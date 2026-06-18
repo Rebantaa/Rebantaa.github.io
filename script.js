@@ -280,4 +280,82 @@
     setInterval(updateGreeting, 60000);
   }
 
+  /* ============================================================
+     TYPEWRITER ROLE TITLE
+     Cycles through cybersecurity roles character-by-character.
+     Query text is purely presentational — no routing or filtering.
+     ============================================================ */
+  var twEl     = document.getElementById("typewriterText");
+  var twCursor = document.querySelector(".tw-cursor");
+
+  var TW_TITLES = [
+    "Cybersecurity Engineer",
+    "SOC Analyst",
+    "Security Engineer",
+    "Network Engineer",
+    "Technical Support Engineer",
+    "Detection Engineer",
+    "Incident Response Analyst",
+    "Cloud Security Engineer",
+    "Vulnerability Analyst",
+    "Threat Hunter"
+  ];
+
+  var TW_TYPE_MS   = 72;   /* ms per character while typing  */
+  var TW_DELETE_MS = 36;   /* ms per character while deleting */
+  var TW_PAUSE_END = 1800; /* pause after full title typed    */
+  var TW_PAUSE_GAP = 420;  /* pause after last char deleted   */
+
+  var twIdx      = 0;
+  var twPos      = 0;
+  var twDeleting = false;
+
+  function twSetBlink(on) {
+    if (!twCursor) return;
+    if (on) { twCursor.classList.add("blinking"); }
+    else     { twCursor.classList.remove("blinking"); }
+  }
+
+  function twTick() {
+    var title = TW_TITLES[twIdx];
+
+    if (!twDeleting) {
+      twPos++;
+      twEl.textContent = title.slice(0, twPos);
+      twSetBlink(false);
+      if (twPos === title.length) {
+        twDeleting = true;
+        twSetBlink(true);
+        setTimeout(twTick, TW_PAUSE_END);
+        return;
+      }
+      setTimeout(twTick, TW_TYPE_MS);
+    } else {
+      twPos--;
+      twEl.textContent = title.slice(0, twPos);
+      twSetBlink(false);
+      if (twPos === 0) {
+        twDeleting = false;
+        twIdx      = (twIdx + 1) % TW_TITLES.length;
+        twSetBlink(true);
+        setTimeout(twTick, TW_PAUSE_GAP);
+        return;
+      }
+      setTimeout(twTick, TW_DELETE_MS);
+    }
+  }
+
+  if (twEl) {
+    var twReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (twReducedMotion) {
+      /* Reduced motion: static first title, no cursor */
+      twEl.textContent = TW_TITLES[0];
+      if (twCursor) twCursor.style.display = "none";
+    } else {
+      /* Start after hero entrance animation finishes (~0.94 s) */
+      twSetBlink(true);
+      setTimeout(twTick, 950);
+    }
+  }
+
 })();

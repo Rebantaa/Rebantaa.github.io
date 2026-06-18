@@ -274,6 +274,24 @@ input:focus-visible,
   color: #f6edc2;
   opacity: 0.95;
 }
+/* Typewriter cursor — sits inline after the typed text */
+.tw-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: currentColor;
+  vertical-align: middle;
+  margin-left: 3px;
+  border-radius: 1px;
+}
+.tw-cursor.blinking {
+  animation: twBlink 1.1s step-end infinite;
+}
+@keyframes twBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
 /* Professional intro line, moved to sit beneath the name */
 .intro {
   position: relative;
@@ -476,6 +494,7 @@ input:focus-visible,
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .name, .role-label, .intro, .search-wrap, .wheel-wrap { opacity: 1; transform: none; }
+  .tw-cursor { display: none; }
 }
 
 /* ============================================================
