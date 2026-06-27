@@ -33,7 +33,7 @@ Rebantaa.github.io/
 ├── images/
 │   └── IMG_2827.JPG
 ├── assets/
-│   ├── Rebanta-Resume.pdf
+│   ├── Rebanta_Daadhiich_Resume.pdf
 │   └── earth-asia-solid.png
 └── README.md
 ```
